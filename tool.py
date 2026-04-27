@@ -68,6 +68,37 @@ DESKTOP_PATH = os.path.join(os.path.expanduser("~"), "Desktop")
 OUTPUT_BASE = os.path.join(DESKTOP_PATH, "描述图制作")
 
 # ═══════════════════════════════════════════════════════════════════════════════
+# 加载 prompts.json（支持远程更新）
+# ═══════════════════════════════════════════════════════════════════════════════
+
+PROMPTS_FILE = os.path.join(os.path.dirname(__file__), "prompts.json")
+
+def load_prompts():
+    """加载提示词模板，支持从 prompts.json 读取"""
+    if os.path.exists(PROMPTS_FILE):
+        try:
+            with open(PROMPTS_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"警告：加载 prompts.json 失败: {e}，使用内置默认值")
+    return None
+
+_PROMPTS_DATA = load_prompts()
+
+def get_prompt(template_key, fallback_prompt=""):
+    """获取提示词模板，优先从 prompts.json 读取"""
+    if _PROMPTS_DATA and 'templates' in _PROMPTS_DATA:
+        template = _PROMPTS_DATA['templates'].get(template_key, {})
+        return template.get('prompt', fallback_prompt)
+    return fallback_prompt
+
+def get_category_map():
+    """获取类目映射表，优先从 prompts.json 读取"""
+    if _PROMPTS_DATA and 'category_map' in _PROMPTS_DATA:
+        return _PROMPTS_DATA['category_map']
+    return CATEGORY_MAP
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # 零、文件夹管理规范（强制执行）
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -152,7 +183,7 @@ def copy_white_image(source_path, dest_folder):
 # 主图 01-促销首图
 # 约束：只写 1-2 个卖点，手机端文字清晰，价格醒目
 
-MAIN_IMAGE_01_PROMPT = """用这张白底图做一张淘宝主图。调用接口：https://api.henng.cn/v1/images/edits
+MAIN_IMAGE_01_PROMPT = get_prompt('main_image_01', """用这张白底图做一张淘宝主图。调用接口：https://api.henng.cn/v1/images/edits
 
 约束条件：
 1. 这是【促销首图】，目标是最大化点击率
@@ -169,7 +200,7 @@ MAIN_IMAGE_01_PROMPT = """用这张白底图做一张淘宝主图。调用接口
 - 现价：{current_price}元
 - 核心卖点：{selling_points}
 
-你是淘宝运营专家，请从运营视角自由发挥设计。"""
+你是淘宝运营专家，请从运营视角自由发挥设计。""")
 
 # 主图 02-痛点解决图
 # 约束：明确痛点 + 解决方案，让用户产生共鸣
