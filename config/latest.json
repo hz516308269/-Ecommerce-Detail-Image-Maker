@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "changelog": "初始版本：支持5张主图+5张详情图生成",
+  "changelog_en": "Initial release: 5 main images + 5 detail images generation",
+  "url": "https://github.com/hz516308269/-Ecommerce-Detail-Image-Maker/archive/refs/heads/main.zip",
+  "prompts_url": "https://raw.githubusercontent.com/hz516308269/-Ecommerce-Detail-Image-Maker/main/prompts/prompts.json"
+}
