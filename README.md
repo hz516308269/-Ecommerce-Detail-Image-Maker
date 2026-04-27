@@ -71,7 +71,4 @@ The plugin supports remote update checks from GitHub.
 
 ---
 
-## 作者 / Author
 
-- 微信 / WeChat: nulifeiyu001
-- 价格 / Price: 5元/套 (5主图+5详情图)
